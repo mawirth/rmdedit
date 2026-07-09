@@ -49,21 +49,31 @@ example `fontspec`, `unicode-math`, `babel`, `microtype`, `tikz`, `fancyhdr`,
 ## Quickstart
 
 ```bash
+pipx install git+https://github.com/mawirth/rmdedit.git
+rmdedit --help
 git clone https://github.com/mawirth/rmdedit.git
 cd rmdedit
-python3 rmdedit.py --help
-python3 rmdedit.py examples/beispiel-notiz-neutral.Rmd --force
+rmdedit examples/beispiel-notiz-neutral.Rmd --force
 ```
 
 The rendered PDF is written next to the input file by default.
+Update an existing `pipx` installation with:
+
+```bash
+pipx upgrade rmdedit
+```
 
 You can also render all `.Rmd` files in the current directory:
 
 ```bash
-python3 /path/to/rmdedit/rmdedit.py
+rmdedit
 ```
 
-An installed wrapper command is not required for version 1.
+From a source checkout, the compatibility wrapper still works:
+
+```bash
+python3 rmdedit.py examples/beispiel-notiz-neutral.Rmd --force
+```
 
 ## Repository Boundary
 
@@ -85,25 +95,25 @@ repositories or installed packages.
 ## Usage
 
 ```bash
-python3 rmdedit.py examples/beispiel-notiz-neutral.Rmd --force
+rmdedit examples/beispiel-notiz-neutral.Rmd --force
 ```
 
 Rebuild only if the `.Rmd`, selected template or assets are newer than the PDF:
 
 ```bash
-python3 rmdedit.py examples/beispiel-notiz-neutral.Rmd
+rmdedit examples/beispiel-notiz-neutral.Rmd
 ```
 
 Remove temporary LaTeX files but keep the generated PDF:
 
 ```bash
-python3 rmdedit.py examples/beispiel-notiz-neutral.Rmd --clean
+rmdedit examples/beispiel-notiz-neutral.Rmd --clean
 ```
 
 Write to an explicit PDF output path:
 
 ```bash
-python3 rmdedit.py examples/beispiel-notiz-neutral.Rmd --output /tmp/beispiel.pdf
+rmdedit examples/beispiel-notiz-neutral.Rmd --output /tmp/beispiel.pdf
 ```
 
 `--output` is only valid with exactly one `.Rmd` input file.
@@ -151,15 +161,16 @@ There are three optional config levels:
 The project-local file takes precedence because its template roots are searched
 first. Relative paths are resolved relative to the config file they appear in.
 
-Without a config file, `rmdedit` uses this implicit root:
+Without a config file, `rmdedit` uses the templates and assets installed with
+the Python package:
 
 ```json
 {
   "template_roots": [
     {
       "name": "base",
-      "path": "./templates",
-      "assets": "./assets"
+      "path": "<package>/templates",
+      "assets": "<package>/assets"
     }
   ]
 }

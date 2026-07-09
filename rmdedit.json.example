@@ -2,8 +2,8 @@
   "template_roots": [
     {
       "name": "base",
-      "path": "./templates",
-      "assets": "./assets"
+      "path": "./src/rmdedit/templates",
+      "assets": "./src/rmdedit/assets"
     }
   ]
 }
