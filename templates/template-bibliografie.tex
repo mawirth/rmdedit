@@ -1,0 +1,32 @@
+% Bibliografie
+
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+
+\newenvironment{CSLReferences}[2]
+{%
+	\begin{list}{}{%
+			\setlength{\leftmargin}{\cslhangindent}%
+			\setlength{\itemindent}{-\cslhangindent}%
+			\setlength{\itemsep}{\baselineskip}%
+			\setlength{\parsep}{0pt}%
+		}%
+		}
+		{\end{list}}
+
+\newcommand{\CSLLeftMargin}[1]{}
+\newcommand{\CSLRightInline}[1]{#1}
+\newcommand{\CSLIndent}[1]{\hspace{1.5em}}
+
+% citeproc compatibility
+\providecommand{\citeproc}[2]{#2}
+\providecommand{\citeproctext}{}
+\providecommand{\citeprocnum}[1]{#1}
+\providecommand{\citeprocdate}[1]{#1}
+\providecommand{\citeprocauthor}[1]{#1}
+
+% Literaturverzeichnis: Klammern vor Labels unterdruecken
+% (verhindert leere [] im thebibliography-Output)
+\makeatletter
+\renewcommand\@biblabel[1]{}
+\makeatother

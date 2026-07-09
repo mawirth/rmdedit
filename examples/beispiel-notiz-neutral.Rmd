@@ -1,0 +1,10 @@
+---
+datum: "2026-05-28"
+titel: "Technische Notiz"
+rmdedit:
+  template: notiz-neutral
+---
+
+# Uebersicht
+
+Dies ist ein neutrales Beispiel ohne Firmenlogo und ohne geschützte Assets.

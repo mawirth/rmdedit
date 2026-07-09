@@ -1,0 +1,15 @@
+.texlive-cache/
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+examples/*.pdf
+__pycache__/
+*.pyc

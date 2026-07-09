@@ -1,0 +1,14 @@
+\documentclass[11pt,a4paper]{article}
+\input{template-common.tex}
+\input{template-bibliografie.tex}
+
+\title{$if(titel)$$titel$$else$$title$$endif$}
+\author{$if(author)$$author$$else$$endif$}
+\date{$if(datum)$$datum$$else$$date$$endif$}
+
+\begin{document}
+\maketitle
+
+$body$
+
+\end{document}

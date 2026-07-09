@@ -1,0 +1,23 @@
+\usepackage{fontspec}
+\usepackage{newunicodechar}
+\usepackage[ngerman]{babel}
+\usepackage{microtype}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{longtable}
+\newcounter{none}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+
+\geometry{a4paper, left=25mm, right=25mm, top=28mm, bottom=30mm}
+\setmainfont{Latin Modern Roman}
+\setsansfont{Latin Modern Sans}
+\setmonofont{Latin Modern Mono}
+\newfontfamily\RmdeditSymbolFont{STIX Two Math}
+\newunicodechar{✓}{{\RmdeditSymbolFont\symbol{"2713}}}
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
