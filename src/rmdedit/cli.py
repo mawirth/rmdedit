@@ -11,7 +11,7 @@ import shutil
 import subprocess
 import sys
 from dataclasses import dataclass
-from pathlib import Path
+from pathlib import Path, PurePath
 from typing import Iterable
 
 
@@ -449,6 +449,11 @@ def clean_latex_files(directory: Path) -> list[Path]:
     return removed
 
 
+def pandoc_path(path: PurePath) -> str:
+    """Return a path that is safe to embed in Pandoc/LaTeX variables."""
+    return path.as_posix()
+
+
 def render(rmd: Path, match: TemplateMatch, output: Path | None = None) -> subprocess.CompletedProcess[str]:
     if shutil.which("Rscript") is None:
         raise RuntimeError("Rscript nicht gefunden. Bitte R installieren oder Rscript in PATH aufnehmen.")
@@ -493,9 +498,9 @@ def render(rmd: Path, match: TemplateMatch, output: Path | None = None) -> subpr
             r_expr,
             str(rmd),
             str(match.template),
-            str(assets),
-            str(fonts),
-            str(logos),
+            pandoc_path(assets),
+            pandoc_path(fonts),
+            pandoc_path(logos),
             str(output) if output else "",
         ],
         cwd=str(rmd.parent),
