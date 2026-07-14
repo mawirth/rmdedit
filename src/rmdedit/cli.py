@@ -36,6 +36,7 @@ CLEAN_PATTERNS = [
     "*.fdb_latexmk",
     "*.synctex.gz",
 ]
+WINDOWS_STATUS_BAD_FUNCTION_TABLE = {-1073741569, 0xC00000FF}
 
 
 @dataclass(frozen=True)
@@ -454,6 +455,39 @@ def pandoc_path(path: PurePath) -> str:
     return path.as_posix()
 
 
+def file_state(path: Path) -> tuple[int, int] | None:
+    try:
+        stat = path.stat()
+    except FileNotFoundError:
+        return None
+    return stat.st_mtime_ns, stat.st_size
+
+
+def complete_pdf(path: Path) -> bool:
+    try:
+        with path.open("rb") as handle:
+            if handle.read(5) != b"%PDF-":
+                return False
+            handle.seek(max(0, path.stat().st_size - 1024))
+            return b"%%EOF" in handle.read()
+    except (OSError, ValueError):
+        return False
+
+
+def recoverable_windows_r_shutdown(
+    returncode: int,
+    pdf: Path,
+    previous_state: tuple[int, int] | None,
+) -> bool:
+    """Recognize the known Windows R shutdown crash after a valid render."""
+    return (
+        sys.platform == "win32"
+        and returncode in WINDOWS_STATUS_BAD_FUNCTION_TABLE
+        and file_state(pdf) != previous_state
+        and complete_pdf(pdf)
+    )
+
+
 def render(rmd: Path, match: TemplateMatch, output: Path | None = None) -> subprocess.CompletedProcess[str]:
     if shutil.which("Rscript") is None:
         raise RuntimeError("Rscript nicht gefunden. Bitte R installieren oder Rscript in PATH aufnehmen.")
@@ -553,8 +587,12 @@ def process_file(
 
     if needs_build(rmd, match, force, pdf):
         print(f"Baue {rmd} mit Template {template_name} ({match.template})", flush=True)
+        previous_pdf_state = file_state(pdf)
         result = render(rmd, match, output)
-        if result.returncode != 0:
+        recovered_shutdown = recoverable_windows_r_shutdown(
+            result.returncode, pdf, previous_pdf_state
+        )
+        if result.returncode != 0 and not recovered_shutdown:
             print(f"Fehler beim Bauen von {rmd}", file=sys.stderr)
             print(f"Template: {template_name}", file=sys.stderr)
             print(f"Template-Pfad: {match.template}", file=sys.stderr)
@@ -563,6 +601,11 @@ def process_file(
                 removed = clean_latex_files(rmd.parent)
                 print(f"Clean: {len(removed)} temporaere Datei(en) entfernt in {rmd.parent}.")
             return False
+        if recovered_shutdown:
+            print(
+                "Warnung: Rscript meldete beim Beenden unter Windows "
+                "STATUS_BAD_FUNCTION_TABLE; das neu erzeugte PDF ist vollstaendig."
+            )
         print(f"Erzeugt: {pdf}")
     else:
         print(f"Ueberspringe {rmd}: {pdf.name} ist aktuell.")
