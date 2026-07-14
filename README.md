@@ -42,9 +42,10 @@ Rscript -e 'install.packages(c("rmarkdown", "knitr", "tinytex"), repos = "https:
 Rscript -e 'tinytex::install_tinytex()'
 ```
 
-Depending on your templates, additional LaTeX packages may be required, for
-example `fontspec`, `unicode-math`, `babel`, `microtype`, `tikz`, `fancyhdr`,
-`lastpage`, `tabularx`, `longtable`, `booktabs`, `hyperref` or `ragged2e`.
+The bundled base template uses Latin Modern, the standard font family shipped
+with TeX Live and TinyTeX. It does not require an additional system font.
+External templates may require additional LaTeX packages or fonts, for example
+`unicode-math`, `tikz`, `lastpage`, `tabularx` or `ragged2e`.
 
 ## Quickstart
 
