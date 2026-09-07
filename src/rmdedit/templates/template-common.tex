@@ -8,6 +8,7 @@
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{graphicx}
+\usepackage{amssymb}
 \usepackage{fancyhdr}
 
 \geometry{a4paper, left=25mm, right=25mm, top=28mm, bottom=30mm}
@@ -18,3 +19,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \fancyfoot[C]{\thepage}
+
+% Pandoc emits \tightlist for compact Markdown lists.
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
